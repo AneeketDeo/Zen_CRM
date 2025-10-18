@@ -56,9 +56,15 @@ A full-stack CRM application built with React frontend and Python FastAPI backen
 ### Backend Setup
 
 #### Option 1: Quick Setup (Recommended)
+1. Install uv from Astral project
+```bash
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+2. Run backend
 ```bash
 cd backend
-python setup.py
+uv sync
+uv run main.py 
 ```
 
 #### Option 2: Manual Setup
