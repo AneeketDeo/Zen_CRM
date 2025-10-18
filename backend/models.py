@@ -88,6 +88,7 @@ class Interaction(Base):
     notes = Column(Text)
     contact_id = Column(Integer, ForeignKey("contacts.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
+    scheduled_date = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships

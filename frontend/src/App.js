@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import Contacts from './components/Contacts';
 import Tasks from './components/Tasks';
 import Deals from './components/Deals';
+import Interactions from './components/Interactions';
 import Layout from './components/Layout';
 
 function ProtectedRoute({ children }) {
@@ -54,6 +55,13 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Deals />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/interactions" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Interactions />
                 </Layout>
               </ProtectedRoute>
             } />

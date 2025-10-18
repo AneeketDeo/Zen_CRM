@@ -64,9 +64,13 @@ class InteractionBase(BaseModel):
     type: InteractionType
     subject: str
     notes: Optional[str] = None
+    scheduled_date: Optional[datetime] = None
 
 class InteractionCreate(InteractionBase):
     contact_id: int
+
+class InteractionUpdate(InteractionBase):
+    contact_id: Optional[int] = None
 
 class InteractionResponse(InteractionBase):
     id: int

@@ -12,7 +12,7 @@ from models import User, Contact, Interaction, Task, Deal
 from schemas import (
     UserCreate, UserResponse, UserLogin,
     ContactCreate, ContactResponse, ContactUpdate,
-    InteractionCreate, InteractionResponse,
+    InteractionCreate, InteractionUpdate, InteractionResponse,
     TaskCreate, TaskResponse, TaskUpdate,
     DealCreate, DealResponse, DealUpdate,
     DashboardStats
@@ -21,7 +21,7 @@ from auth import get_password_hash, verify_password, create_access_token, get_cu
 from crud import (
     create_user, get_user_by_email, get_users,
     create_contact, get_contacts, get_contact, update_contact, delete_contact,
-    create_interaction, get_interactions_by_contact,
+    create_interaction, get_interactions, get_interaction, update_interaction, delete_interaction, get_interactions_by_contact,
     create_task, get_tasks, get_task, update_task, delete_task,
     create_deal, get_deals, get_deal, update_deal, delete_deal,
     get_dashboard_stats
@@ -123,6 +123,32 @@ def delete_contact_endpoint(contact_id: int, db: Session = Depends(get_db), curr
 @app.post("/interactions", response_model=InteractionResponse)
 def create_interaction_endpoint(interaction: InteractionCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return create_interaction(db, interaction, current_user.id)
+
+@app.get("/interactions", response_model=List[InteractionResponse])
+def read_interactions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    interactions = get_interactions(db, skip=skip, limit=limit, user_id=current_user.id)
+    return interactions
+
+@app.get("/interactions/{interaction_id}", response_model=InteractionResponse)
+def read_interaction(interaction_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    interaction = get_interaction(db, interaction_id=interaction_id)
+    if interaction is None:
+        raise HTTPException(status_code=404, detail="Interaction not found")
+    return interaction
+
+@app.put("/interactions/{interaction_id}", response_model=InteractionResponse)
+def update_interaction_endpoint(interaction_id: int, interaction: InteractionUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    db_interaction = update_interaction(db, interaction_id, interaction)
+    if db_interaction is None:
+        raise HTTPException(status_code=404, detail="Interaction not found")
+    return db_interaction
+
+@app.delete("/interactions/{interaction_id}")
+def delete_interaction_endpoint(interaction_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    success = delete_interaction(db, interaction_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Interaction not found")
+    return {"message": "Interaction deleted successfully"}
 
 @app.get("/contacts/{contact_id}/interactions", response_model=List[InteractionResponse])
 def read_contact_interactions(contact_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):

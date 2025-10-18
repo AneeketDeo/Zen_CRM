@@ -6,6 +6,7 @@ import {
   Users, 
   CheckSquare, 
   TrendingUp, 
+  MessageSquare,
   LogOut,
   Menu,
   X
@@ -17,6 +18,7 @@ const navigation = [
   { name: 'Contacts', href: '/contacts', icon: Users },
   { name: 'Tasks', href: '/tasks', icon: CheckSquare },
   { name: 'Deals', href: '/deals', icon: TrendingUp },
+  { name: 'Interactions', href: '/interactions', icon: MessageSquare },
 ];
 
 export default function Layout({ children }) {
@@ -68,10 +70,10 @@ export default function Layout({ children }) {
 
       {/* Desktop sidebar */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-        <div className="flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white">
+        <div className="flex-1 flex flex-col min-h-0 bg-teal-800">
           <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
-              <h1 className="text-xl font-bold text-primary-600">ZenCRM</h1>
+              <h1 className="text-xl font-bold text-white">CRM</h1>
             </div>
             <nav className="mt-5 flex-1 px-2 space-y-1">
               {navigation.map((item) => {
@@ -82,8 +84,8 @@ export default function Layout({ children }) {
                     to={item.href}
                     className={`${
                       isActive
-                        ? 'bg-primary-100 text-primary-900'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        ? 'bg-teal-700 text-white'
+                        : 'text-teal-100 hover:bg-teal-700 hover:text-white'
                     } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
                   >
                     <item.icon className="mr-3 h-6 w-6" />
@@ -93,20 +95,20 @@ export default function Layout({ children }) {
               })}
             </nav>
           </div>
-          <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+          <div className="flex-shrink-0 flex border-t border-teal-700 p-4">
             <div className="flex-shrink-0 w-full group block">
               <div className="flex items-center">
                 <div>
-                  <div className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                  <div className="text-sm font-medium text-teal-100 group-hover:text-white">
                     {user?.full_name}
                   </div>
-                  <div className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                  <div className="text-xs font-medium text-teal-300 group-hover:text-teal-100">
                     {user?.email}
                   </div>
                 </div>
                 <button
                   onClick={logout}
-                  className="ml-auto flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="ml-auto flex-shrink-0 bg-teal-700 p-1 text-teal-300 rounded-full hover:text-white hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500"
                 >
                   <LogOut className="h-5 w-5" />
                 </button>

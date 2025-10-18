@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List, Optional
 from models import User, Contact, Interaction, Task, Deal, ContactStatus, TaskStatus, DealStage
-from schemas import UserCreate, ContactCreate, ContactUpdate, InteractionCreate, TaskCreate, TaskUpdate, DealCreate, DealUpdate, DashboardStats
+from schemas import UserCreate, ContactCreate, ContactUpdate, InteractionCreate, InteractionUpdate, TaskCreate, TaskUpdate, DealCreate, DealUpdate, DashboardStats
 
 # User CRUD operations
 def create_user(db: Session, user: UserCreate, hashed_password: str):
@@ -68,6 +68,33 @@ def create_interaction(db: Session, interaction: InteractionCreate, user_id: int
 
 def get_interactions_by_contact(db: Session, contact_id: int):
     return db.query(Interaction).filter(Interaction.contact_id == contact_id).order_by(Interaction.created_at.desc()).all()
+
+def get_interactions(db: Session, skip: int = 0, limit: int = 100, user_id: Optional[int] = None):
+    query = db.query(Interaction)
+    if user_id:
+        query = query.filter(Interaction.user_id == user_id)
+    return query.order_by(Interaction.created_at.desc()).offset(skip).limit(limit).all()
+
+def get_interaction(db: Session, interaction_id: int):
+    return db.query(Interaction).filter(Interaction.id == interaction_id).first()
+
+def update_interaction(db: Session, interaction_id: int, interaction: InteractionUpdate):
+    db_interaction = db.query(Interaction).filter(Interaction.id == interaction_id).first()
+    if db_interaction:
+        update_data = interaction.dict(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(db_interaction, field, value)
+        db.commit()
+        db.refresh(db_interaction)
+    return db_interaction
+
+def delete_interaction(db: Session, interaction_id: int):
+    db_interaction = db.query(Interaction).filter(Interaction.id == interaction_id).first()
+    if db_interaction:
+        db.delete(db_interaction)
+        db.commit()
+        return True
+    return False
 
 # Task CRUD operations
 def create_task(db: Session, task: TaskCreate, owner_id: int):
