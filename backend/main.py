@@ -37,7 +37,7 @@ app = FastAPI(title="ZenCRM API", version="1.0.0")
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://zen-crm-hazel.vercel.app/"],  # React dev server
+    allow_origins=["http://localhost:3000", "https://zen-crm-hazel.vercel.app"],  # React dev server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
