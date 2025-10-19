@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit, Trash2, Phone, Mail, Building, User } from 'lucide-react';
 import axios from 'axios';
 
-REACT_APP_URL = process.env.REACT_APP_URL;
-if (!REACT_APP_URL) {
-  throw new Error('REACT_APP_URL is not set');
-}
 
 const statusColors = {
   lead: 'bg-yellow-100 text-yellow-800',
@@ -36,7 +32,7 @@ export default function Contacts() {
 
   const fetchContacts = async () => {
     try {
-      const response = await axios.get(REACT_APP_URL+'/contacts');
+      const response = await axios.get(process.env.REACT_APP_URL+'/contacts');
       setContacts(response.data);
     } catch (error) {
       console.error('Error fetching contacts:', error);
@@ -49,9 +45,9 @@ export default function Contacts() {
     e.preventDefault();
     try {
       if (editingContact) {
-        await axios.put(REACT_APP_URL+`/contacts/${editingContact.id}`, formData);
+        await axios.put(process.env.REACT_APP_URL+`/contacts/${editingContact.id}`, formData);
       } else {
-        await axios.post(REACT_APP_URL+'/contacts', formData);
+        await axios.post(process.env.REACT_APP_URL+'/contacts', formData);
       }
       fetchContacts();
       setShowModal(false);
@@ -89,7 +85,7 @@ export default function Contacts() {
   const handleDelete = async (contactId) => {
     if (window.confirm('Are you sure you want to delete this contact?')) {
       try {
-        await axios.delete(REACT_APP_URL+`/contacts/${contactId}`);
+        await axios.delete(process.env.REACT_APP_URL+`/contacts/${contactId}`);
         fetchContacts();
       } catch (error) {
         console.error('Error deleting contact:', error);

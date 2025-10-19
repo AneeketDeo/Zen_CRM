@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit, Trash2, CheckCircle, Clock, AlertCircle, Calendar } from 'lucide-react';
 import axios from 'axios';
 
-REACT_APP_URL = process.env.REACT_APP_URL;
-if (!REACT_APP_URL) {
-  throw new Error('REACT_APP_URL is not set');
-}
 
 const priorityColors = {
   low: 'bg-gray-100 text-gray-800',
@@ -45,7 +41,7 @@ export default function Tasks() {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(REACT_APP_URL+'/tasks');
+      const response = await axios.get(process.env.REACT_APP_URL+'/tasks');
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -56,7 +52,7 @@ export default function Tasks() {
 
   const fetchContacts = async () => {
     try {
-      const response = await axios.get(REACT_APP_URL+'/contacts');
+      const response = await axios.get(process.env.REACT_APP_URL+'/contacts');
       setContacts(response.data);
     } catch (error) {
       console.error('Error fetching contacts:', error);
@@ -73,9 +69,9 @@ export default function Tasks() {
       };
 
       if (editingTask) {
-        await axios.put(REACT_APP_URL+`/tasks/${editingTask.id}`, taskData);
+        await axios.put(process.env.REACT_APP_URL+`/tasks/${editingTask.id}`, taskData);
       } else {
-        await axios.post(REACT_APP_URL+'/tasks', taskData);
+        await axios.post(process.env.REACT_APP_URL+'/tasks', taskData);
       }
       fetchTasks();
       setShowModal(false);
@@ -109,7 +105,7 @@ export default function Tasks() {
   const handleDelete = async (taskId) => {
     if (window.confirm('Are you sure you want to delete this task?')) {
       try {
-        await axios.delete(REACT_APP_URL+`/tasks/${taskId}`);
+        await axios.delete(process.env.REACT_APP_URL+`/tasks/${taskId}`);
         fetchTasks();
       } catch (error) {
         console.error('Error deleting task:', error);
@@ -119,7 +115,7 @@ export default function Tasks() {
 
   const handleStatusChange = async (taskId, newStatus) => {
     try {
-      await axios.put(REACT_APP_URL+`/tasks/${taskId}`, { status: newStatus });
+      await axios.put(process.env.REACT_APP_URL+`/tasks/${taskId}`, { status: newStatus });
       fetchTasks();
     } catch (error) {
       console.error('Error updating task status:', error);
