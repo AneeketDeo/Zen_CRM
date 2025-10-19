@@ -54,6 +54,11 @@ def get_db():
 # OAuth2 scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+# Default endpoint
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to ZenCRM API"}
+
 # Authentication endpoints
 @app.post("/register", response_model=UserResponse)
 def register(user: UserCreate, db: Session = Depends(get_db)):
