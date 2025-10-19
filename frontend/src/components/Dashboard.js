@@ -34,6 +34,11 @@ import {
 } from 'recharts';
 import axios from 'axios';
 
+REACT_APP_URL = process.env.REACT_APP_URL;
+if (!REACT_APP_URL) {
+  throw new Error('REACT_APP_URL is not set');
+}
+
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 export default function Dashboard() {
@@ -46,7 +51,7 @@ export default function Dashboard() {
 
   const fetchDashboardStats = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/dashboard/stats');
+      const response = await axios.get(REACT_APP_URL+'/dashboard/stats');
       setStats(response.data);
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);

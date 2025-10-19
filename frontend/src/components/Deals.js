@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit, Trash2, DollarSign, TrendingUp, Calendar, User } from 'lucide-react';
 import axios from 'axios';
 
+REACT_APP_URL = process.env.REACT_APP_URL;
+if (!REACT_APP_URL) {
+  throw new Error('REACT_APP_URL is not set');
+}
+
 const stageColors = {
   prospecting: 'bg-gray-100 text-gray-800',
   qualification: 'bg-blue-100 text-blue-800',
@@ -36,7 +41,7 @@ export default function Deals() {
 
   const fetchDeals = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/deals');
+      const response = await axios.get(REACT_APP_URL+'/deals');
       setDeals(response.data);
     } catch (error) {
       console.error('Error fetching deals:', error);
@@ -47,7 +52,7 @@ export default function Deals() {
 
   const fetchContacts = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/contacts');
+      const response = await axios.get(REACT_APP_URL+'/contacts');
       setContacts(response.data);
     } catch (error) {
       console.error('Error fetching contacts:', error);
@@ -65,9 +70,9 @@ export default function Deals() {
       };
 
       if (editingDeal) {
-        await axios.put(`http://localhost:8000/deals/${editingDeal.id}`, dealData);
+        await axios.put(REACT_APP_URL+`/deals/${editingDeal.id}`, dealData);
       } else {
-        await axios.post('http://localhost:8000/deals', dealData);
+        await axios.post(REACT_APP_URL+'/deals', dealData);
       }
       fetchDeals();
       setShowModal(false);
@@ -103,7 +108,7 @@ export default function Deals() {
   const handleDelete = async (dealId) => {
     if (window.confirm('Are you sure you want to delete this deal?')) {
       try {
-        await axios.delete(`http://localhost:8000/deals/${dealId}`);
+        await axios.delete(REACT_APP_URL+`/deals/${dealId}`);
         fetchDeals();
       } catch (error) {
         console.error('Error deleting deal:', error);

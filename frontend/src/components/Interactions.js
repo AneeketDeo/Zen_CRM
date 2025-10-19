@@ -13,6 +13,11 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
+REACT_APP_URL = process.env.REACT_APP_URL;
+if (!REACT_APP_URL) {
+  throw new Error('REACT_APP_URL is not set');
+}
+
 export default function Interactions() {
   const [interactions, setInteractions] = useState([]);
   const [contacts, setContacts] = useState([]);
@@ -36,7 +41,7 @@ export default function Interactions() {
 
   const fetchInteractions = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/interactions');
+      const response = await axios.get(REACT_APP_URL+'/interactions');
       setInteractions(response.data);
     } catch (error) {
       console.error('Error fetching interactions:', error);
@@ -47,7 +52,7 @@ export default function Interactions() {
 
   const fetchContacts = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/contacts/');
+      const response = await axios.get(REACT_APP_URL+'/contacts/');
       setContacts(response.data);
     } catch (error) {
       console.error('Error fetching contacts:', error);
@@ -64,9 +69,9 @@ export default function Interactions() {
       };
       
       if (editingInteraction) {
-        await axios.put(`http://localhost:8000/interactions/${editingInteraction.id}`, submitData);
+        await axios.put(REACT_APP_URL+`/interactions/${editingInteraction.id}`, submitData);
       } else {
-        await axios.post('http://localhost:8000/interactions/', submitData);
+        await axios.post(REACT_APP_URL+'/interactions/', submitData);
       }
       fetchInteractions();
       setShowModal(false);
@@ -98,7 +103,7 @@ export default function Interactions() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this interaction?')) {
       try {
-        await axios.delete(`http://localhost:8000/interactions/${id}`);
+        await axios.delete(REACT_APP_URL+`/interactions/${id}`);
         fetchInteractions();
       } catch (error) {
         console.error('Error deleting interaction:', error);
