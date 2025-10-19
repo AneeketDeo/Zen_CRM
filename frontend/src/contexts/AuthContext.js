@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/users/me');
+      const response = await axios.get(process.env.REACT_APP_URL+'/users/me');
       setUser(response.data);
     } catch (error) {
       localStorage.removeItem('token');
@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
       formData.append('username', email);
       formData.append('password', password);
       
-      const response = await axios.post('http://localhost:8000/token', formData, {
+      const response = await axios.post(process.env.REACT_APP_URL+'/token', formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
@@ -61,7 +61,7 @@ export function AuthProvider({ children }) {
 
   const register = async (userData) => {
     try {
-      await axios.post('http://localhost:8000/register', userData);
+      await axios.post(process.env.REACT_APP_URL+'/register', userData);
       return { success: true };
     } catch (error) {
       return { 
